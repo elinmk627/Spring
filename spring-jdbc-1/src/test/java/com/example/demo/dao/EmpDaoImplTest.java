@@ -30,12 +30,27 @@ public class EmpDaoImplTest {
 		
 		// then : 무슨 결과를 얻어야 한다.
 		
+		int oldCount = empDao.count();
+		System.out.println("oldCount = " + oldCount);		
 		
 		Emp emp = new Emp();
 		emp.setEmpno(3201);
 		emp.setEname("홍길동");
 		emp.setJob("도둑");
 		emp.setSal(999);
+		
+		try {
+			int affected = empDao.insert(emp);
+			System.out.println("affected = " + affected);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		int nowCount = empDao.count();
+		System.out.println("nowCount = " + nowCount);
+		assertEquals("insert 메소드에서 예외발생, 트랜잭션 어드바이스 적용, " 
+				+ "롤백이 되어야 하기 때문에 oldCount 값과 nowCount 값은 같아야 한다.", 
+				oldCount, nowCount);
 		
 		int affected = empDao.insert(emp);		
 		System.out.println("affected = " + affected);

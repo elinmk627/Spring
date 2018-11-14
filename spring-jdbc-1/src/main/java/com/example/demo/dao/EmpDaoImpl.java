@@ -48,7 +48,13 @@ public class EmpDaoImpl implements EmpDao {
 				emp.getJob(), 
 				emp.getSal());
 		
-		return affected;
+//		return affected;
+		
+		/*
+		* 트랜잭션 테스트
+		*/
+		System.out.println("영향받은 로우의 개수 = " + affected);
+		throw new RuntimeException("트랜잭션 테스트 용 언체크드 예외");
 	}
 
 	@Override
