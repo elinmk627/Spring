@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.EmpDao">
+	
+	<!-- 수정쿼리인 경우, 메소드의 리턴 값으로 영향받은 로우의 개수를 마이바티스 알아서 처리한다. -->
+	
+	<!-- public int insert(Emp emp); -->
+	<insert id="insert">
+		insert into EMP (ename, job, sal) 
+		values (#{ename}, #{job}, #{sal})
+		<selectKey order="AFTER" keyProperty="empno" resultType="int">
+			select LAST_INSERT_ID() as empno
+		</selectKey>
+	</insert>
+
+	<!-- public int update(Emp emp);-->
+	<update id="update">
+		update EMP set ename=#{ename}, job=#{job}, sal=#{sal}
+		where empno=#{empno}	
+	</update>
+	
+	<!-- public int delete(int empno); -->
+	<delete id="delete">
+		delete from EMP where empno=#{empno}
+	</delete>
+	
+	<!-- 
+	1. 컬럼명들 == 멤버변수명들, 마이바티스 알아서 처리
+	 -->
+	<!-- public List<Emp> findAll(); -->
+	<!-- 컬럼명과 멤버변수가 다를 때 매핑해주는것 -->
+	<select id="findAll" resultMap="empRowMapper">
+		select * from emp order by empno asc
+	</select>
+	
+	<!-- public int count(); -->
+	<select id="count" resultType="int">
+		select count(*) from emp
+	</select>
+	
+	<!-- public Emp findOne(int empno); -->
+	<select id="findOne" resultType="Emp">
+		select * from emp where empno=#{empno}	
+	</select>
+	
+	<!--   @Results(id="empRowMapper", value={
+			@Result(property="empno", column="empno"),
+			@Result(property="ename", column="ename"),
+			@Result(property="job", column="job"),
+			@Result(property="sal", column="sal"),
+	})-->
+	<resultMap type="Emp" id="empRowMapper">
+		<result property="empno" column="empno" />
+		<result property="ename" column="ename" />
+		<result property="job" column="job" />
+		<result property="sal" column="sal" />
+	</resultMap>
+</mapper>
